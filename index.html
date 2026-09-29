@@ -62,19 +62,18 @@
     <div class="row justify-content-center">
       <div class="col-lg-7 col-md-9">
 
-        <!-- Mensagem de Confirmação (Aparece ao enviar) -->
+        <!-- Mensagem de Confirmação com Botão de Novo Cadastro -->
         <div id="alertSuccess" class="alert alert-success card-custom p-4 text-center d-none" role="alert">
           <i class="bi bi-check-circle-fill text-success display-4 d-block mb-2"></i>
           <h4 class="fw-bold">Cadastro Realizado com Sucesso!</h4>
           <p class="mb-4 text-muted">Agradecemos o preenchimento. Os dados foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
           
-          <!-- Botão para novo cadastro -->
           <button type="button" id="resetBtn" class="btn btn-samuraikan px-4 py-2">
             <i class="bi bi-plus-circle me-2"></i>Fazer Novo Cadastro
           </button>
         </div>
 
-        <!-- Formulário para os Pais -->
+        <!-- Formulário -->
         <div id="formCard" class="card card-custom p-4">
           <div class="mb-4 text-center">
             <h4 class="fw-bold text-dark mb-1">Seja bem-vindo(a)!</h4>
@@ -100,8 +99,8 @@
                 <!-- Telefone / WhatsApp do Responsável -->
                 <div class="col-md-6 mb-3">
                   <label for="phone" class="form-label fw-semibold">Telefone / WhatsApp *</label>
-                  <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(74) 99999-9999" required>
-                  <div class="invalid-feedback">Informe um número de contato.</div>
+                  <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(74) 99999-9999" maxlength="15" required>
+                  <div class="invalid-feedback">Informe um número de contato válido.</div>
                 </div>
               </div>
             </div>
@@ -149,7 +148,27 @@
     const alertSuccess = document.getElementById('alertSuccess');
     const submitBtn = document.getElementById('submitBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const phoneInput = document.getElementById('phone');
 
+    // Máscara para Telefone
+    phoneInput.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 11) value = value.slice(0, 11);
+
+      if (value.length > 10) {
+        value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+      } else if (value.length > 6) {
+        value = value.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+      } else if (value.length > 2) {
+        value = value.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+      } else if (value.length > 0) {
+        value = value.replace(/^(\d{0,2})$/, '($1');
+      }
+
+      e.target.value = value;
+    });
+
+    // Submissão do Formulário
     form.addEventListener('submit', function (event) {
       event.preventDefault();
 
@@ -159,14 +178,13 @@
         return;
       }
 
-      // Desabilita o botão enquanto envia
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
 
       const parentName = document.getElementById('parentName').value.trim();
       const studentName = document.getElementById('studentName').value.trim();
       const birthDate = document.getElementById('birthDate').value;
-      const phone = document.getElementById('phone').value.trim();
+      const phone = phoneInput.value.trim();
 
       const payload = {
         parentName: parentName,
@@ -189,17 +207,14 @@
       });
     });
 
-    // Evento do botão "Fazer Novo Cadastro"
+    // Ação do Botão "Fazer Novo Cadastro"
     resetBtn.addEventListener('click', function () {
-      // Reseta os campos do formulário
       form.reset();
       form.classList.remove('was-validated');
 
-      // Reabilita e restaura o texto do botão de envio
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Concluir Cadastro';
 
-      // Esconde o card de sucesso e reexibe o formulário
       alertSuccess.classList.add('d-none');
       formCard.classList.remove('d-none');
     });
