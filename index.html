@@ -41,6 +41,11 @@
     .text-samuraikan {
       color: var(--samuraikan-red);
     }
+    .section-title {
+      font-size: 1.1rem;
+      border-left: 4px solid var(--samuraikan-red);
+      padding-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -73,36 +78,54 @@
 
           <form id="enrollmentForm" novalidate>
             
-            <!-- Nome do Responsável -->
-            <div class="mb-3">
-              <label for="parentName" class="form-label fw-semibold">Nome do Responsável *</label>
-              <input type="text" class="form-control form-control-lg fs-6" id="parentName" placeholder="Ex: Maria Aparecida da Silva" required>
-              <div class="invalid-feedback">Por favor, informe seu nome completo.</div>
+            <!-- SEÇÃO 1: DADOS DO RESPONSÁVEL -->
+            <div class="mb-4">
+              <h5 class="fw-bold text-dark section-title mb-3">
+                <i class="bi bi-person-badge text-samuraikan me-2"></i>Dados do Responsável
+              </h5>
+
+              <div class="row">
+                <!-- Nome do Responsável -->
+                <div class="col-md-6 mb-3">
+                  <label for="parentName" class="form-label fw-semibold">Nome do Responsável *</label>
+                  <input type="text" class="form-control form-control-lg fs-6" id="parentName" placeholder="Ex: Maria Aparecida da Silva" required>
+                  <div class="invalid-feedback">Por favor, informe seu nome completo.</div>
+                </div>
+
+                <!-- Telefone / WhatsApp do Responsável -->
+                <div class="col-md-6 mb-3">
+                  <label for="phone" class="form-label fw-semibold">Telefone / WhatsApp *</label>
+                  <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(74) 99999-9999" required>
+                  <div class="invalid-feedback">Informe um número de contato.</div>
+                </div>
+              </div>
             </div>
 
-            <!-- Nome do Aluno(a) -->
-            <div class="mb-3">
-              <label for="studentName" class="form-label fw-semibold">Nome Completo do Aluno(a) *</label>
-              <input type="text" class="form-control form-control-lg fs-6" id="studentName" placeholder="Ex: Pedro Silva Lopes" required>
-              <div class="invalid-feedback">Por favor, informe o nome do aluno(a).</div>
-            </div>
+            <hr class="my-4 text-secondary opacity-25">
 
-            <!-- Data de Nascimento e Telefone -->
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento do Aluno *</label>
+            <!-- SEÇÃO 2: DADOS DO ALUNO(A) -->
+            <div class="mb-4">
+              <h5 class="fw-bold text-dark section-title mb-3">
+                <i class="bi bi-person-vcard text-samuraikan me-2"></i>Dados do Aluno(a)
+              </h5>
+
+              <!-- Nome do Aluno(a) -->
+              <div class="mb-3">
+                <label for="studentName" class="form-label fw-semibold">Nome Completo do Aluno(a) *</label>
+                <input type="text" class="form-control form-control-lg fs-6" id="studentName" placeholder="Ex: Pedro Silva Lopes" required>
+                <div class="invalid-feedback">Por favor, informe o nome do aluno(a).</div>
+              </div>
+
+              <!-- Data de Nascimento do Aluno -->
+              <div class="mb-3">
+                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento *</label>
                 <input type="date" class="form-control form-control-lg fs-6" id="birthDate" required>
                 <div class="invalid-feedback">Selecione a data de nascimento.</div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="phone" class="form-label fw-semibold">Telefone / WhatsApp *</label>
-                <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(74) 99999-9999" required>
-                <div class="invalid-feedback">Informe um número de contato.</div>
               </div>
             </div>
 
             <!-- Botão de Envio -->
-            <button type="submit" id="submitBtn" class="btn btn-samuraikan w-100 py-3 fs-5 mt-3 shadow-sm">
+            <button type="submit" id="submitBtn" class="btn btn-samuraikan w-100 py-3 fs-5 mt-2 shadow-sm">
               <i class="bi bi-check2-circle me-2"></i>Concluir Cadastro
             </button>
 
