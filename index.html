@@ -66,7 +66,12 @@
         <div id="alertSuccess" class="alert alert-success card-custom p-4 text-center d-none" role="alert">
           <i class="bi bi-check-circle-fill text-success display-4 d-block mb-2"></i>
           <h4 class="fw-bold">Cadastro Realizado com Sucesso!</h4>
-          <p class="mb-0 text-muted">Agradecemos o preenchimento. Os dados foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
+          <p class="mb-4 text-muted">Agradecemos o preenchimento. Os dados foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
+          
+          <!-- Botão para novo cadastro -->
+          <button type="button" id="resetBtn" class="btn btn-samuraikan px-4 py-2">
+            <i class="bi bi-plus-circle me-2"></i>Fazer Novo Cadastro
+          </button>
         </div>
 
         <!-- Formulário para os Pais -->
@@ -137,13 +142,13 @@
   </div>
 
   <script>
-    // URL corrigida (sem o "h" duplicado)
-    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzDuxKlnl7Yevi8Bu0C593pcfuhRYsfJseMnZWLZ08gxCfNyVdV1Ud16KvHedOijDjLDw/exec";
+    const GOOGLE_SHEETS_WEBHOOK_URL = "SUA_NOVA_URL_AQUI";
 
     const form = document.getElementById('enrollmentForm');
     const formCard = document.getElementById('formCard');
     const alertSuccess = document.getElementById('alertSuccess');
     const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     form.addEventListener('submit', function (event) {
       event.preventDefault();
@@ -171,7 +176,6 @@
         createdAt: new Date().toLocaleString('pt-BR')
       };
 
-      // Envia os dados encapsulados em JSON
       fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -183,6 +187,21 @@
         console.error("Erro ao enviar:", err);
         showSuccess();
       });
+    });
+
+    // Evento do botão "Fazer Novo Cadastro"
+    resetBtn.addEventListener('click', function () {
+      // Reseta os campos do formulário
+      form.reset();
+      form.classList.remove('was-validated');
+
+      // Reabilita e restaura o texto do botão de envio
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="bi bi-check2-circle me-2"></i>Concluir Cadastro';
+
+      // Esconde o card de sucesso e reexibe o formulário
+      alertSuccess.classList.add('d-none');
+      formCard.classList.remove('d-none');
     });
 
     function showSuccess() {
