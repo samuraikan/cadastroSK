@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academia de Judô SAMURAIKAN - Ficha de Matrícula</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --samuraikan-red: #d90429;
+      --samuraikan-dark: #1f1f1f;
+      --samuraikan-gray: #f8f9fa;
+    }
+    body {
+      background-color: var(--samuraikan-gray);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .header-banner {
+      background: linear-gradient(135deg, var(--samuraikan-dark) 0%, #000000 100%);
+      border-bottom: 4px solid var(--samuraikan-red);
+    }
+    .card-custom {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .btn-samuraikan {
+      background-color: var(--samuraikan-red);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      transition: background-color 0.2s ease;
+    }
+    .btn-samuraikan:hover {
+      background-color: #b00320;
+      color: #fff;
+    }
+    .text-samuraikan {
+      color: var(--samuraikan-red);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner do Cabeçalho -->
+  <header class="header-banner text-white py-4 mb-4">
+    <div class="container text-center">
+      <h1 class="fw-bold mb-1">JUDÔ SAMURAIKAN</h1>
+      <p class="mb-0">Cadastro de Aluno(a)</p>
+    </div>
+  </header>
+
+  <div class="container mb-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 col-md-9">
+
+        <!-- Mensagem de Confirmação (Aparece ao enviar) -->
+        <div id="alertSuccess" class="alert alert-success card-custom p-4 text-center d-none" role="alert">
+          <i class="bi bi-check-circle-fill text-success display-4 d-block mb-2"></i>
+          <h4 class="fw-bold">Cadastro Realizado com Sucesso!</h4>
+          <p class="mb-0 text-muted">Agradecemos o preenchimento. Os dados do aluno foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
+        </div>
+
+        <!-- Formulário para os Pais -->
+        <div id="formCard" class="card card-custom p-4">
+          <div class="mb-4 text-center">
+            <h4 class="fw-bold text-dark mb-1">Seja bem-vindo(a)!</h4>
+            <p class="text-muted small">Preencha os dados abaixo para realizar o cadastro.</p>
+          </div>
+
+          <form id="enrollmentForm" novalidate>
+            
+            <!-- Nome do Responsável -->
+            <div class="mb-3">
+              <label for="parentName" class="form-label fw-semibold">Nome do Responsável *</label>
+              <input type="text" class="form-control form-control-lg fs-6" id="parentName" placeholder="Ex: Maria Aparecida da Silva" required>
+              <div class="invalid-feedback">Por favor, informe seu nome completo.</div>
+            </div>
+
+            <!-- Nome do Aluno(a) -->
+            <div class="mb-3">
+              <label for="studentName" class="form-label fw-semibold">Nome Completo do Aluno(a) *</label>
+              <input type="text" class="form-control form-control-lg fs-6" id="studentName" placeholder="Ex: Pedro Silva Lopes" required>
+              <div class="invalid-feedback">Por favor, informe o nome do aluno(a).</div>
+            </div>
+
+            <!-- Data de Nascimento e Telefone -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento do Aluno *</label>
+                <input type="date" class="form-control form-control-lg fs-6" id="birthDate" required>
+                <div class="invalid-feedback">Selecione a data de nascimento.</div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label fw-semibold">WhatsApp *</label>
+                <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(74) 99999-9999" required>
+                <div class="invalid-feedback">Informe um número de contato.</div>
+              </div>
+            </div>
+
+            <!-- Botão de Envio -->
+            <button type="submit" id="submitBtn" class="btn btn-samuraikan w-100 py-3 fs-5 mt-3 shadow-sm">
+              <i class="bi bi-check2-circle me-2"></i>Concluir Cadastro
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxA9fYCGsNWl8qa7tGny6cKJJYh8OTqzkVuzFiNJBpN0jNSdIFDK2c8qOMudinL7KVycA/exec";
+
+    const form = document.getElementById('enrollmentForm');
+    const formCard = document.getElementById('formCard');
+    const alertSuccess = document.getElementById('alertSuccess');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
+      }
+
+      // Desabilita o botão enquanto envia
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+
+      const parentName = document.getElementById('parentName').value.trim();
+      const studentName = document.getElementById('studentName').value.trim();
+      const birthDate = document.getElementById('birthDate').value;
+      const phone = document.getElementById('phone').value.trim();
+
+      const params = new URLSearchParams();
+      params.append('parentName', parentName);
+      params.append('studentName', studentName);
+      params.append('birthDate', formatDate(birthDate));
+      params.append('phone', phone);
+      params.append('createdAt', new Date().toLocaleString('pt-BR'));
+
+      // Envia para o Google Sheets via POST seguro
+      fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      })
+      .then(() => showSuccess())
+      .catch(err => {
+        console.error("Erro ao enviar:", err);
+        showSuccess();
+      });
+    });
+
+    function showSuccess() {
+      formCard.classList.add('d-none');
+      alertSuccess.classList.remove('d-none');
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const [year, month, day] = dateString.split('-');
+      return `${day}/${month}/${year}`;
+    }
+  </script>
+</body>
+</html>
