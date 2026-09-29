@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Academia de Judô SAMURAIKAN - Cadastro</title>
+  <title>Academia de Judô SAMURAIKAN - Ficha de Matrícula</title>
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Bootstrap Icons -->
@@ -41,11 +41,6 @@
     .text-samuraikan {
       color: var(--samuraikan-red);
     }
-    .student-badge {
-      background-color: #ffffff;
-      border: 1px solid #dee2e6;
-      border-left: 4px solid var(--samuraikan-red);
-    }
   </style>
 </head>
 <body>
@@ -66,66 +61,52 @@
         <div id="alertSuccess" class="alert alert-success card-custom p-4 text-center d-none" role="alert">
           <i class="bi bi-check-circle-fill text-success display-4 d-block mb-2"></i>
           <h4 class="fw-bold">Cadastro Realizado com Sucesso!</h4>
-          <p class="mb-0 text-muted">Agradecemos o preenchimento. Os dados foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
+          <p class="mb-0 text-muted">Agradecemos o preenchimento. Os dados do aluno foram enviados para a coordenação da <strong>SAMURAIKAN</strong>.</p>
         </div>
 
-        <!-- Card do Formulário -->
+        <!-- Formulário para os Pais -->
         <div id="formCard" class="card card-custom p-4">
           <div class="mb-4 text-center">
             <h4 class="fw-bold text-dark mb-1">Seja bem-vindo(a)!</h4>
-            <p class="text-muted small">Preencha os dados do responsável e do(s) atleta(s).</p>
+            <p class="text-muted small">Preencha os dados abaixo para realizar o cadastro do atleta.</p>
           </div>
 
-          <!-- Dados do Responsável -->
-          <div class="mb-4 border-bottom pb-3">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-badge text-samuraikan me-2"></i>1. Dados do Responsável</h5>
+          <form id="enrollmentForm" novalidate>
+            
+            <!-- Nome do Responsável -->
+            <div class="mb-3">
+              <label for="parentName" class="form-label fw-semibold">Nome do Responsável / Tutor *</label>
+              <input type="text" class="form-control form-control-lg fs-6" id="parentName" placeholder="Ex: Maria Aparecida da Silva" required>
+              <div class="invalid-feedback">Por favor, informe seu nome completo.</div>
+            </div>
+
+            <!-- Nome do Aluno(a) -->
+            <div class="mb-3">
+              <label for="studentName" class="form-label fw-semibold">Nome Completo do Aluno(a) *</label>
+              <input type="text" class="form-control form-control-lg fs-6" id="studentName" placeholder="Ex: Pedro Silva Lopes" required>
+              <div class="invalid-feedback">Por favor, informe o nome do aluno(a).</div>
+            </div>
+
+            <!-- Data de Nascimento e Telefone -->
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="parentName" class="form-label fw-semibold">Nome do Responsável *</label>
-                <input type="text" class="form-control form-control-lg fs-6" id="parentName" placeholder="Ex: Maria Aparecida da Silva">
-                <div class="invalid-feedback" id="parentNameError">Por favor, informe o nome do responsável.</div>
+                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento do Aluno *</label>
+                <input type="date" class="form-control form-control-lg fs-6" id="birthDate" required>
+                <div class="invalid-feedback">Selecione a data de nascimento.</div>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="phone" class="form-label fw-semibold">WhatsApp *</label>
-                <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(87) 99999-9999">
-                <div class="invalid-feedback" id="phoneError">Informe um número de contato.</div>
+                <label for="phone" class="form-label fw-semibold">Telefone / WhatsApp *</label>
+                <input type="tel" class="form-control form-control-lg fs-6" id="phone" placeholder="(87) 99999-9999" required>
+                <div class="invalid-feedback">Informe um número de contato.</div>
               </div>
             </div>
-          </div>
 
-          <!-- Dados do(s) Aluno(s) -->
-          <div class="mb-3">
-            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-fill-add text-samuraikan me-2"></i>2. Dados do Aluno(a)</h5>
-            
-            <div id="studentFormBox" class="bg-light p-3 rounded mb-3 border">
-              <div class="mb-3">
-                <label for="studentName" class="form-label fw-semibold">Nome Completo do Aluno(a) *</label>
-                <input type="text" class="form-control" id="studentName" placeholder="Ex: Pedro Silva Lopes">
-                <div class="invalid-feedback" id="studentNameError">Informe o nome do aluno(a).</div>
-              </div>
+            <!-- Botão de Envio -->
+            <button type="submit" id="submitBtn" class="btn btn-samuraikan w-100 py-3 fs-5 mt-3 shadow-sm">
+              <i class="bi bi-check2-circle me-2"></i>Concluir Cadastro
+            </button>
 
-              <div class="mb-3">
-                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento do Aluno *</label>
-                <input type="date" class="form-control" id="birthDate">
-                <div class="invalid-feedback" id="birthDateError">Selecione a data de nascimento.</div>
-              </div>
-
-              <button type="button" id="addStudentBtn" class="btn btn-outline-dark w-100 py-2 btn-sm fw-semibold">
-                <i class="bi bi-plus-circle me-1"></i>+ Adicionar Aluno(a) à Lista
-              </button>
-            </div>
-
-            <!-- Lista de Alunos Adicionados na Sessão -->
-            <div id="studentsListContainer" class="d-none mb-3">
-              <label class="form-label fw-semibold text-dark">Alunos a serem cadastrados:</label>
-              <div id="studentsList"></div>
-            </div>
-          </div>
-
-          <!-- Botão de Envio Final -->
-          <button type="button" id="submitBtn" class="btn btn-samuraikan w-100 py-3 fs-5 mt-2 shadow-sm">
-            <i class="bi bi-check2-circle me-2"></i>Concluir Cadastro
-          </button>
+          </form>
         </div>
 
       </div>
@@ -135,161 +116,48 @@
   <script>
     const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxA9fYCGsNWl8qa7tGny6cKJJYh8OTqzkVuzFiNJBpN0jNSdIFDK2c8qOMudinL7KVycA/exec";
 
-    const parentNameInput = document.getElementById('parentName');
-    const phoneInput = document.getElementById('phone');
-    const studentNameInput = document.getElementById('studentName');
-    const birthDateInput = document.getElementById('birthDate');
-    
-    const addStudentBtn = document.getElementById('addStudentBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    const studentsListContainer = document.getElementById('studentsListContainer');
-    const studentsList = document.getElementById('studentsList');
+    const form = document.getElementById('enrollmentForm');
     const formCard = document.getElementById('formCard');
     const alertSuccess = document.getElementById('alertSuccess');
+    const submitBtn = document.getElementById('submitBtn');
 
-    let studentsArray = [];
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
 
-    // Adicionar aluno à lista local
-    addStudentBtn.addEventListener('click', function() {
-      if (!validateStudentFields()) return;
-
-      const student = {
-        studentName: studentNameInput.value.trim(),
-        birthDate: formatDate(birthDateInput.value)
-      };
-
-      studentsArray.push(student);
-      renderStudentsList();
-
-      // Limpa campos do aluno para o próximo filho(a)
-      studentNameInput.value = '';
-      birthDateInput.value = '';
-      clearStudentValidation();
-    });
-
-    // Renderiza a lista visual dos alunos adicionados
-    function renderStudentsList() {
-      studentsList.innerHTML = '';
-      if (studentsArray.length > 0) {
-        studentsListContainer.classList.remove('d-none');
-      } else {
-        studentsListContainer.classList.add('d-none');
+      if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
+        return;
       }
 
-      studentsArray.forEach((st, index) => {
-        const item = document.createElement('div');
-        item.className = 'student-badge p-2 mb-2 rounded d-flex justify-content-between align-items-center shadow-sm';
-        item.innerHTML = `
-          <div>
-            <strong>${index + 1}. ${st.studentName}</strong> <br>
-            <small class="text-muted">Nascimento: ${st.birthDate}</small>
-          </div>
-          <button type="button" class="btn btn-outline-danger btn-sm border-0" onclick="removeStudent(${index})">
-            <i class="bi bi-trash"></i>
-          </button>
-        `;
-        studentsList.appendChild(item);
-      });
-    }
-
-    // Remover aluno da lista
-    window.removeStudent = function(index) {
-      studentsArray.splice(index, 1);
-      renderStudentsList();
-    };
-
-    // Validação dos campos do aluno
-    function validateStudentFields() {
-      let valid = true;
-      if (!studentNameInput.value.trim()) {
-        studentNameInput.classList.add('is-invalid');
-        valid = false;
-      } else {
-        studentNameInput.classList.remove('is-invalid');
-      }
-
-      if (!birthDateInput.value) {
-        birthDateInput.classList.add('is-invalid');
-        valid = false;
-      } else {
-        birthDateInput.classList.remove('is-invalid');
-      }
-      return valid;
-    }
-
-    function clearStudentValidation() {
-      studentNameInput.classList.remove('is-invalid');
-      birthDateInput.classList.remove('is-invalid');
-    }
-
-    // Validação dos campos do responsável
-    function validateParentFields() {
-      let valid = true;
-      if (!parentNameInput.value.trim()) {
-        parentNameInput.classList.add('is-invalid');
-        valid = false;
-      } else {
-        parentNameInput.classList.remove('is-invalid');
-      }
-
-      if (!phoneInput.value.trim()) {
-        phoneInput.classList.add('is-invalid');
-        valid = false;
-      } else {
-        phoneInput.classList.remove('is-invalid');
-      }
-      return valid;
-    }
-
-    // Envio Final
-    submitBtn.addEventListener('click', function() {
-      if (!validateParentFields()) return;
-
-      // Se não adicionou nada na lista, mas preencheu o formulário de aluno, adiciona automaticamente
-      if (studentsArray.length === 0) {
-        if (studentNameInput.value.trim() && birthDateInput.value) {
-          studentsArray.push({
-            studentName: studentNameInput.value.trim(),
-            birthDate: formatDate(birthDateInput.value)
-          });
-        } else {
-          alert('Por favor, preencha os dados de pelo menos um aluno.');
-          return;
-        }
-      }
-
-      // Desabilita botão durante o envio
+      // Desabilita o botão enquanto envia
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
 
-      const parentName = parentNameInput.value.trim();
-      const phone = phoneInput.value.trim();
-      const createdAt = new Date().toLocaleString('pt-BR');
+      const parentName = document.getElementById('parentName').value.trim();
+      const studentName = document.getElementById('studentName').value.trim();
+      const birthDate = document.getElementById('birthDate').value;
+      const phone = document.getElementById('phone').value.trim();
 
-      // Envia uma requisição para cada aluno cadastrado
-      let promises = studentsArray.map(student => {
-        const params = new URLSearchParams();
-        params.append('parentName', parentName);
-        params.append('studentName', student.studentName);
-        params.append('birthDate', student.birthDate);
-        params.append('phone', phone);
-        params.append('createdAt', createdAt);
+      const params = new URLSearchParams();
+      params.append('parentName', parentName);
+      params.append('studentName', studentName);
+      params.append('birthDate', formatDate(birthDate));
+      params.append('phone', phone);
+      params.append('createdAt', new Date().toLocaleString('pt-BR'));
 
-        return fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: params.toString()
-        });
+      // Envia para o Google Sheets via POST seguro
+      fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString()
+      })
+      .then(() => showSuccess())
+      .catch(err => {
+        console.error("Erro ao enviar:", err);
+        showSuccess();
       });
-
-      Promise.all(promises)
-        .then(() => showSuccess())
-        .catch(err => {
-          console.error("Erro ao enviar:", err);
-          showSuccess();
-        });
     });
 
     function showSuccess() {
