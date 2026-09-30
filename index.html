@@ -120,11 +120,36 @@
                 <div class="invalid-feedback">Por favor, informe o nome do aluno(a).</div>
               </div>
 
-              <!-- Data de Nascimento do Aluno -->
-              <div class="mb-3">
-                <label for="birthDate" class="form-label fw-semibold">Data de Nascimento *</label>
-                <input type="date" class="form-control form-control-lg fs-6" id="birthDate" required>
-                <div class="invalid-feedback">Selecione a data de nascimento.</div>
+              <div class="row">
+                <!-- Data de Nascimento do Aluno -->
+                <div class="col-md-6 mb-3">
+                  <label for="birthDate" class="form-label fw-semibold">Data de Nascimento *</label>
+                  <input type="date" class="form-control form-control-lg fs-6" id="birthDate" required>
+                  <div class="invalid-feedback">Selecione a data de nascimento.</div>
+                </div>
+
+                <!-- Graduação / Faixa Atual -->
+                <div class="col-md-6 mb-3">
+                  <label for="beltRank" class="form-label fw-semibold">Graduação (Faixa Atual) *</label>
+                  <select class="form-select form-select-lg fs-6" id="beltRank" required>
+                    <option value="" selected disabled>Selecione a faixa...</option>
+                    <option value="Branca">Branca</option>
+                    <option value="Branca Ponta Cinza">Branca Ponta Cinza</option>
+                    <option value="Bordô">Bordô</option>
+                    <option value="Cinza">Cinza</option>
+                    <option value="Cinza Ponta Azul">Cinza Ponta Azul</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Azul Ponta Amarela">Azul Ponta Amarela</option>
+                    <option value="Amarela">Amarela</option>
+                    <option value="Amarela Ponta Laranja">Amarela Ponta Laranja</option>
+                    <option value="Laranja">Laranja</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Roxa">Roxa</option>
+                    <option value="Marrom">Marrom</option>
+                    <option value="Preta">Preta</option>
+                  </select>
+                  <div class="invalid-feedback">Selecione a graduação atual do aluno(a).</div>
+                </div>
               </div>
             </div>
 
@@ -141,7 +166,7 @@
   </div>
 
   <script>
-    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzDuxKlnl7Yevi8Bu0C593pcfuhRYsfJseMnZWLZ08gxCfNyVdV1Ud16KvHedOijDjLDw/exec";
+    const GOOGLE_SHEETS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxWdaO7AIdB1zS27vaOkJJoaMb0D_jaC4za24a4unEUdXdzMbOCxei2z_33MntKUASWOA/exec";
 
     const form = document.getElementById('enrollmentForm');
     const formCard = document.getElementById('formCard');
@@ -184,12 +209,14 @@
       const parentName = document.getElementById('parentName').value.trim();
       const studentName = document.getElementById('studentName').value.trim();
       const birthDate = document.getElementById('birthDate').value;
+      const beltRank = document.getElementById('beltRank').value;
       const phone = phoneInput.value.trim();
 
       const payload = {
         parentName: parentName,
         studentName: studentName,
         birthDate: formatDate(birthDate),
+        beltRank: beltRank,
         phone: phone,
         createdAt: new Date().toLocaleString('pt-BR')
       };
